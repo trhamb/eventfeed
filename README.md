@@ -1,2 +1,2 @@
 # eventfeed
-A system for automating the creation of audio event listings.
+A system for automating the creation of audio for SSW event listings.
