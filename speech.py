@@ -3,32 +3,9 @@
 
 from datetime import datetime
 
-test_data = [
-    {
-        "name": "Coffee Morning",
-        "start": "2026-03-09 10:00:00",
-        "end": "2026-03-09 12:00:00",
-    },
-    {
-        "name": "Chess Club",
-        "start": "2026-03-09 11:00:00",
-        "end": "2026-03-09 12:30:00",
-    },
-    {
-        "name": "Monday Bus Trip: Squires",
-        "start": "2026-03-09 11:00:00",
-        "end": "2026-03-09 13:00:00",
-    },
-    {
-        "name": "Showdown for Beginners",
-        "start": "2026-03-09 13:00:00",
-        "end": "2026-03-09 15:00:00",
-    },
-]
-
 
 def date_suffix(d):
-    if d == 11 | 12 | 13:
+    if d in (11, 12, 13):
         return "th"
     elif d % 10 == 1:
         return "st"
@@ -44,6 +21,10 @@ def build_speech(data):
     # List of speech lines to be joined.
     speech_parts = []
 
+    # If the list is empty
+    if len(data) == 0:
+        return ["<speak>There are no events listed</speak>"]
+
     # Loop through events and get date and time parts
     for i in range(0, len(data)):
         start_date_text = datetime.strptime(data[i]["start"], "%Y-%m-%d %H:%M:%S")
@@ -51,7 +32,7 @@ def build_speech(data):
 
         day = start_date_text.strftime("%A")
         s_date = start_date_text.strftime("%d")
-        suffix = date_suffix("%d")
+        suffix = date_suffix(int(s_date))
         suffixed = f"{s_date}{suffix}"
         month = start_date_text.strftime("%B")
         s_time = start_date_text.strftime("%I:%M %p")
@@ -65,4 +46,28 @@ def build_speech(data):
     return speech_parts
 
 
-print(build_speech(test_data))
+def generate_ssml(list):
+    open_tag = "<speak>"
+    close_tag = "</speak>"
+    separator = '<break time="500ms"/>'
+
+    body = separator.join(list)
+
+    return open_tag + body + close_tag
+
+
+def generate_json(speech_list):
+    speech = generate_ssml(speech_list)
+
+    json_output = {
+        "version": "1.0",
+        "response": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": speech,
+            },
+            "shouldEndSession": True,
+        },
+    }
+
+    return json_output

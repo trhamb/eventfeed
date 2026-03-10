@@ -1,6 +1,7 @@
 # Fetcher grabs events from sswcharity.org.uk via the Event Calendar URLS
 # The response is simply returned from the function.
 
+
 import requests
 import datetime as dt
 
@@ -20,6 +21,8 @@ def fetch_events():
     print("REQUEST DETAILS")
     print(f"Response status: {r.status_code}")
     print(f"Start: {start}, End: {end}")
-    print(r.url)
-    print("--------------------------------------------------")
+    print(f"Requested URL: {r.url}")
+    print(
+        "------------------------------------------------------------------------------------------------------------------"
+    )
     return r
