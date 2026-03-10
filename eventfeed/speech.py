@@ -48,13 +48,12 @@ def build_speech(data):
 
 def generate_ssml(list):
     open_tag = "<speak>"
-    intro = "Welcome to the Sight Support Hub. Here are this week's upcoming events:"
     close_tag = "</speak>"
-    separator = '<break time="1000ms"/>'
+    separator = '<break time="500ms"/>'
 
     body = separator.join(list)
 
-    return open_tag + intro + body + close_tag
+    return open_tag + body + close_tag
 
 
 def generate_json(speech_list):
