@@ -3,10 +3,14 @@
 
 
 import requests
+import calendar
 import datetime as dt
 
 start = dt.date.today()
-end = start + dt.timedelta(days=6)
+# end = start + dt.timedelta(days=6)
+dotm = calendar.monthrange(start.year, start.month)[1]
+end = start + dt.timedelta(days=(dotm - start.day))
+
 
 url = f"https://sswcharity.org.uk/wp-json/tribe/events/v1/events"
 
