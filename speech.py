@@ -46,7 +46,7 @@ def build_speech(data):
     return speech_parts
 
 
-def generate_ssml(list):
+def generate_event_ssml(list):
     open_tag = "<speak>"
     intro = "Welcome to the Sight Support Hub. Here are this week's upcoming events:"
     close_tag = "</speak>"
@@ -57,8 +57,8 @@ def generate_ssml(list):
     return open_tag + intro + body + close_tag
 
 
-def generate_json(speech_list):
-    speech = generate_ssml(speech_list)
+def generate_event_json(speech_list):
+    speech = generate_event_ssml(speech_list)
 
     json_output = {
         "version": "1.0",
