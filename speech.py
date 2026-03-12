@@ -46,15 +46,31 @@ def build_speech(data):
     return speech_parts
 
 
+def skill_launch():
+    speech = "<speak>Welcome to the Sight Support Alexa Hub. <break time='250ms'/>For this week's events, say: this week. <break time='250ms'/>For this month's events, say: this month</speak>"
+
+    json_output = {
+        "version": "1.0",
+        "response": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": speech,
+            },
+            "shouldEndSession": False,
+        },
+    }
+    return json_output
+
+
 def generate_event_ssml(list):
     open_tag = "<speak>"
-    intro = "Welcome to the Sight Support Hub. Here are this week's upcoming events:"
+    # intro = "Welcome to the Sight Support Hub. Here are this week's upcoming events:"
     close_tag = "</speak>"
     separator = '<break time="1000ms"/>'
 
     body = separator.join(list)
 
-    return open_tag + intro + body + close_tag
+    return open_tag + body + close_tag
 
 
 def generate_event_json(speech_list):
