@@ -2,6 +2,7 @@
 # to be converted to SSML and submited to Echo Devices.
 
 from datetime import datetime
+from os import sep
 
 
 def date_suffix(d):
@@ -47,7 +48,7 @@ def build_speech(data):
 
 
 def skill_launch():
-    speech = "<speak>Welcome to the Sight Support Alexa Hub. <break time='250ms'/>For this week's events, say: this week. <break time='250ms'/>For this month's events, say: this month</speak>"
+    speech = "<speak>Welcome to the Sight Support Alexa Hub. <break time='250ms'/>For tomorrow's events. say 'Tomorrow'. For this week's events, say 'this week'. <break time='250ms'/>For this month's events, say 'this month'</speak>"
 
     json_output = {
         "version": "1.0",
@@ -62,19 +63,27 @@ def skill_launch():
     return json_output
 
 
-def generate_event_ssml(list):
+def generate_event_ssml(list, request_type):
+    intro_speech = ""
     open_tag = "<speak>"
-    # intro = "Welcome to the Sight Support Hub. Here are this week's upcoming events:"
     close_tag = "</speak>"
-    separator = '<break time="1000ms"/>'
+    separator = '<break time="1500ms"/>'
+    end_speech = '<break time="1000ms" />End of event list.'
+
+    if request_type == "tomorrow":
+        intro_speech = "Here are the events for tomorrow: <break time='1500ms' />"
+    elif request_type == "week":
+        intro_speech = "Here are the events for this week: <break time='1500ms' />"
+    elif request_type == "month":
+        intro_speech = "Here are the events for this month: <break time='1500ms' />"
 
     body = separator.join(list)
 
-    return open_tag + body + close_tag
+    return open_tag + intro_speech + body + end_speech + close_tag
 
 
-def generate_event_json(speech_list):
-    speech = generate_event_ssml(speech_list)
+def generate_event_json(speech_list, request_type):
+    speech = generate_event_ssml(speech_list, request_type)
 
     json_output = {
         "version": "1.0",
