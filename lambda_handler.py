@@ -1,6 +1,8 @@
 from fetcher import fetch_events
 from parser import parse_response
 from speech import build_speech, generate_event_json, skill_launch
+import datetime as dt
+import calendar as cal
 
 testLaunch = {
     "version": "1.0",
@@ -41,17 +43,27 @@ testIntent = {
     },
 }
 
+# Get day/month info
+start = dt.date.today()
+week_day = start.weekday()
+days_of_the_month = cal.monthrange(start.year, start.month)[1]
+month_end = start + dt.timedelta(days=(days_of_the_month - start.day))
+days_til_end = 6 - week_day
+week_end = start + dt.timedelta(days=days_til_end)
+
 
 def handler(event, context):
-    # if event["request"]["type"] == "LaunchRequest":
-    #     skill_launch()
-    # else:
-    #     if event["request"]["intent"]["name"] == "ThisWeekIntent":
-    #         print("This week")
-    #     elif event["request"]["intent"]["name"] == "ThisMonthIntent":
-    #         print("This Month")
+    if event["request"]["type"] == "LaunchRequest":
+        skill_launch()
+    else:
+        if event["request"]["intent"]["name"] == "ThisWeekIntent":
+            generate_event_json(
+                build_speech(parse_response(fetch_events(start, week_end)))
+            )
+        elif event["request"]["intent"]["name"] == "ThisMonthIntent":
+            # Generate JSON using start and end dates.
+            generate_event_json(
+                build_speech(parse_response(fetch_events(start, month_end)))
+            )
 
     return generate_event_json(build_speech(parse_response(fetch_events())))
-
-
-print(handler({}, None))

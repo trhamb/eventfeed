@@ -17,16 +17,19 @@ url = f"https://sswcharity.org.uk/wp-json/tribe/events/v1/events"
 params = {"start_date": start, "end_date": end}
 
 
-def fetch_events():
+def fetch_events(q_start, q_end):
     headers = {"User-Agent": "Mozilla/5.0"}
 
     r = requests.get(url, headers=headers, params=params)
 
     print("REQUEST DETAILS")
     print(f"Response status: {r.status_code}")
-    print(f"Start: {start}, End: {end}")
+    print(f"Start: {q_start}, End: {q_end}")
     print(f"Requested URL: {r.url}")
     print(
         "------------------------------------------------------------------------------------------------------------------"
     )
     return r
+
+
+print(fetch_events(start, end))
